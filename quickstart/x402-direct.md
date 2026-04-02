@@ -31,9 +31,9 @@ app.get("/api/data", (req, res) => {
 
 ## Agent: Pay Automatically
 
-:::tabs
-== TypeScript
-```typescript
+::: code-group
+
+```typescript [TypeScript]
 import { PayClient } from "@pay-skill/sdk";
 
 const client = new PayClient({
@@ -48,8 +48,8 @@ const response = await client.request("https://provider.example.com/api/data");
 const data = await response.json();
 console.log(data); // { data: "premium content" }
 ```
-== Python
-```python
+
+```python [Python]
 from payskill import PayClient
 
 client = PayClient(
@@ -64,11 +64,12 @@ client = PayClient(
 response = client.request("https://provider.example.com/api/data")
 print(response.json())  # { "data": "premium content" }
 ```
-== CLI
-```bash
+
+```bash [CLI]
 pay request https://provider.example.com/api/data
 # => [200] {"data": "premium content"}
 ```
+
 :::
 
 ## What Happened

@@ -4,9 +4,9 @@ Real-time event notifications delivered to your URL. Register a webhook to get n
 
 ## Register a Webhook
 
-:::tabs
-== TypeScript
-```typescript
+::: code-group
+
+```typescript [TypeScript]
 import { Wallet } from "@pay-skill/sdk";
 
 const wallet = new Wallet({
@@ -23,8 +23,8 @@ const hook = await wallet.registerWebhook(
 );
 console.log("webhook id:", hook.id);
 ```
-== Python
-```python
+
+```python [Python]
 from payskill import PayClient
 
 client = PayClient(
@@ -42,12 +42,13 @@ hook = client.register_webhook(
 )
 print("webhook id:", hook.id)
 ```
-== CLI
-```bash
+
+```bash [CLI]
 pay webhook register https://your-app.example.com/hooks \
   --events "payment.completed,tab.charged" \
   --secret "my-hmac-secret"
 ```
+
 :::
 
 If you omit `secret`, the server generates one automatically.
@@ -106,9 +107,9 @@ Every webhook delivery is a POST with a JSON body:
 
 Every delivery includes an `X-Pay-Signature` header — an HMAC-SHA256 of the raw body using your secret:
 
-:::tabs
-== TypeScript (Express)
-```typescript
+::: code-group
+
+```typescript [TypeScript (Express)]
 import crypto from "node:crypto";
 
 app.post("/hooks", (req, res) => {
@@ -127,8 +128,8 @@ app.post("/hooks", (req, res) => {
   res.sendStatus(200);
 });
 ```
-== Python (Flask)
-```python
+
+```python [Python (Flask)]
 import hmac, hashlib
 
 @app.post("/hooks")
@@ -148,35 +149,37 @@ def handle_webhook():
     print(f"{event}: {data}")
     return "", 200
 ```
+
 :::
 
 ## List and Delete
 
-:::tabs
-== TypeScript
-```typescript
+::: code-group
+
+```typescript [TypeScript]
 // List all webhooks
 const hooks = await client.listWebhooks();
 
 // Delete one
 await client.deleteWebhook(hooks[0].webhookId);
 ```
-== Python
-```python
+
+```python [Python]
 # List all webhooks
 hooks = client.list_webhooks()
 
 # Delete one
 client.delete_webhook(hooks[0].id)
 ```
-== CLI
-```bash
+
+```bash [CLI]
 # List
 pay webhook list
 
 # Delete
 pay webhook delete <WEBHOOK_ID>
 ```
+
 :::
 
 ## Delivery Guarantees

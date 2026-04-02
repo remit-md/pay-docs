@@ -33,9 +33,9 @@ app.get("/api/data", (req, res) => {
 
 ## Agent: Auto-Tab Payments
 
-:::tabs
-== TypeScript
-```typescript
+::: code-group
+
+```typescript [TypeScript]
 import { PayClient } from "@pay-skill/sdk";
 
 const client = new PayClient({
@@ -54,8 +54,8 @@ const r2 = await client.request("https://provider.example.com/api/data");
 // Third call: same tab again — no new on-chain permit needed
 const r3 = await client.request("https://provider.example.com/api/data");
 ```
-== Python
-```python
+
+```python [Python]
 from payskill import PayClient
 
 client = PayClient(
@@ -73,13 +73,14 @@ r1 = client.request("https://provider.example.com/api/data")
 r2 = client.request("https://provider.example.com/api/data")
 r3 = client.request("https://provider.example.com/api/data")
 ```
-== CLI
-```bash
+
+```bash [CLI]
 # Each call auto-manages tabs
 pay request https://provider.example.com/api/data
 pay request https://provider.example.com/api/data
 pay request https://provider.example.com/api/data
 ```
+
 :::
 
 ## Why Tabs for Micropayments

@@ -9,9 +9,9 @@ Open a pre-funded tab, charge it multiple times, then close. Tabs are ideal for 
 
 ## 1. Open a Tab
 
-:::tabs
-== TypeScript
-```typescript
+::: code-group
+
+```typescript [TypeScript]
 import { Wallet } from "@pay-skill/sdk";
 
 const agent = new Wallet({
@@ -28,8 +28,8 @@ const tab = await agent.openTab(
 );
 console.log("tab:", tab.tab_id);
 ```
-== Python
-```python
+
+```python [Python]
 from payskill import PayClient
 
 agent = PayClient(
@@ -46,11 +46,12 @@ tab = agent.open_tab(
 )
 print("tab:", tab.tab_id)
 ```
-== CLI
-```bash
+
+```bash [CLI]
 pay tab open 0xProviderAddress 20.00 --max-charge 2.00
 # => tab_id: abc123
 ```
+
 :::
 
 The activation fee (`max($0.10, 1% of $20) = $0.20`) is deducted immediately.
@@ -59,9 +60,9 @@ The activation fee (`max($0.10, 1% of $20) = $0.20`) is deducted immediately.
 
 The provider charges for work completed:
 
-:::tabs
-== TypeScript
-```typescript
+::: code-group
+
+```typescript [TypeScript]
 const provider = new Wallet({
   privateKey: process.env.PROVIDER_KEY!,
   chain: "base-sepolia",
@@ -72,8 +73,8 @@ const provider = new Wallet({
 await provider.chargeTab("abc123", 1);  // charge $1.00
 await provider.chargeTab("abc123", 1);  // charge another $1.00
 ```
-== Python
-```python
+
+```python [Python]
 provider = PayClient(
     api_url="https://testnet.pay-skill.com/api/v1",
     signer="raw", private_key="0xPROVIDER_KEY",
@@ -84,45 +85,48 @@ provider = PayClient(
 provider._post("/tabs/abc123/charge", {"amount": 1_000_000})  # $1.00
 provider._post("/tabs/abc123/charge", {"amount": 1_000_000})  # $1.00
 ```
-== CLI
-```bash
+
+```bash [CLI]
 pay tab charge abc123 1.00
 pay tab charge abc123 1.00
 ```
+
 :::
 
 ## 3. Top Up (Agent Side)
 
 If the tab runs low, the agent can add more funds:
 
-:::tabs
-== TypeScript
-```typescript
+::: code-group
+
+```typescript [TypeScript]
 await agent.topUpTab("abc123", 10);  // add $10.00
 ```
-== CLI
-```bash
+
+```bash [CLI]
 pay tab topup abc123 10.00
 ```
+
 :::
 
 ## 4. Close the Tab
 
 Either party can close unilaterally:
 
-:::tabs
-== TypeScript
-```typescript
+::: code-group
+
+```typescript [TypeScript]
 const result = await agent.closeTab("abc123");
 ```
-== Python
-```python
+
+```python [Python]
 result = agent.close_tab("abc123")
 ```
-== CLI
-```bash
+
+```bash [CLI]
 pay tab close abc123
 ```
+
 :::
 
 ## What Happened on Close

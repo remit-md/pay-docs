@@ -20,9 +20,9 @@ No setup required. An agent sends money to your address — you receive it.
 
 Register a webhook to get notified instantly:
 
-:::tabs
-== TypeScript
-```typescript
+::: code-group
+
+```typescript [TypeScript]
 import { Wallet } from "@pay-skill/sdk";
 
 const provider = new Wallet({
@@ -37,8 +37,8 @@ await provider.registerWebhook(
   ["payment.completed"],
 );
 ```
-== Python
-```python
+
+```python [Python]
 from payskill import PayClient
 
 provider = PayClient(
@@ -54,11 +54,12 @@ provider.register_webhook(
     events=["payment.completed"],
 )
 ```
-== CLI
-```bash
+
+```bash [CLI]
 pay webhook register https://your-api.example.com/hooks \
   --events "payment.completed"
 ```
+
 :::
 
 When a payment arrives, your webhook receives:
@@ -80,21 +81,22 @@ You receive `amount * 0.99` (1% fee deducted).
 
 ### Verify via Balance Check
 
-:::tabs
-== TypeScript
-```typescript
+::: code-group
+
+```typescript [TypeScript]
 const balance = await provider.balance();
 console.log("Balance:", balance, "USDC");
 ```
-== Python
-```python
+
+```python [Python]
 status = provider.get_status()
 print(f"Balance: {status.balance / 1_000_000:.2f} USDC")
 ```
-== CLI
-```bash
+
+```bash [CLI]
 pay status
 ```
+
 :::
 
 ---
@@ -105,9 +107,9 @@ When an agent opens a tab with you, you can charge it for each unit of work.
 
 ### Charge for Work Done
 
-:::tabs
-== TypeScript
-```typescript
+::: code-group
+
+```typescript [TypeScript]
 // Agent opened a tab — you received a tab.opened webhook with the tab_id
 
 // Charge $1.00 per API call
@@ -116,17 +118,18 @@ await provider.chargeTab("abc123", 1);
 // Charge $0.50 for a smaller task
 await provider.chargeTab("abc123", 0.5);
 ```
-== Python
-```python
+
+```python [Python]
 # Charge per unit of work
 provider._post("/tabs/abc123/charge", {"amount": 1_000_000})  # $1.00
 provider._post("/tabs/abc123/charge", {"amount": 500_000})    # $0.50
 ```
-== CLI
-```bash
+
+```bash [CLI]
 pay tab charge abc123 1.00
 pay tab charge abc123 0.50
 ```
+
 :::
 
 ### Monitor Tab State
@@ -151,15 +154,16 @@ Key events for providers:
 
 Either party can close. As provider, close when the work is done:
 
-:::tabs
-== TypeScript
-```typescript
+::: code-group
+
+```typescript [TypeScript]
 await provider.closeTab("abc123");
 ```
-== CLI
-```bash
+
+```bash [CLI]
 pay tab close abc123
 ```
+
 :::
 
 On close: you receive `totalCharged * 0.99`, the 1% fee goes to the fee wallet, and any remaining balance returns to the agent.

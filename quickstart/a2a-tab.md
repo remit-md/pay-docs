@@ -11,9 +11,9 @@ Use A2A tasks with tab-backed metered billing. The agent opens a tab, and the pr
 
 ## Setup: Open a Tab First
 
-:::tabs
-== TypeScript
-```typescript
+::: code-group
+
+```typescript [TypeScript]
 import { Wallet } from "@pay-skill/sdk";
 
 const agent = new Wallet({
@@ -27,8 +27,8 @@ const agent = new Wallet({
 const tab = await agent.openTab("0xProviderAddress", 50, 5);
 console.log("tab:", tab.tab_id);
 ```
-== Python
-```python
+
+```python [Python]
 from payskill import PayClient
 
 agent = PayClient(
@@ -41,6 +41,7 @@ agent = PayClient(
 tab = agent.open_tab("0xProviderAddress", 50_000_000, 5_000_000)
 print("tab:", tab.tab_id)
 ```
+
 :::
 
 ## Send an A2A Task with Tab Reference

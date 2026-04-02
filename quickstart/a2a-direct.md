@@ -19,9 +19,9 @@ The agent card describes the server's A2A capabilities, supported payment method
 
 ## Send a Task with Payment
 
-:::tabs
-== TypeScript
-```typescript
+::: code-group
+
+```typescript [TypeScript]
 const response = await fetch("https://testnet.pay-skill.com/a2a", {
   method: "POST",
   headers: { "Content-Type": "application/json" },
@@ -56,8 +56,8 @@ const response = await fetch("https://testnet.pay-skill.com/a2a", {
 const result = await response.json();
 console.log(result.result.task.status); // "completed"
 ```
-== Python
-```python
+
+```python [Python]
 import httpx
 
 response = httpx.post(
@@ -88,6 +88,7 @@ response = httpx.post(
 )
 print(response.json()["result"]["task"]["status"])
 ```
+
 :::
 
 ## Check Task Status

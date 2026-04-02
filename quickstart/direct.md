@@ -20,32 +20,33 @@ Note the `router` address from the response.
 
 ## 2. Mint Testnet USDC
 
-:::tabs
-== TypeScript
-```typescript
+::: code-group
+
+```typescript [TypeScript]
 const res = await fetch("https://testnet.pay-skill.com/api/v1/mint", {
   method: "POST",
   headers: { "Content-Type": "application/json" },
   body: JSON.stringify({ wallet: "YOUR_ADDRESS", amount: 100 }),
 });
 ```
-== Python
-```python
+
+```python [Python]
 import httpx
 httpx.post("https://testnet.pay-skill.com/api/v1/mint",
     json={"wallet": "YOUR_ADDRESS", "amount": 100})
 ```
-== CLI
-```bash
+
+```bash [CLI]
 pay --api-url https://testnet.pay-skill.com/api/v1 mint 100.00
 ```
+
 :::
 
 ## 3. Send a Direct Payment
 
-:::tabs
-== TypeScript
-```typescript
+::: code-group
+
+```typescript [TypeScript]
 import { Wallet } from "@pay-skill/sdk";
 
 const wallet = new Wallet({
@@ -62,8 +63,8 @@ const result = await wallet.payDirect(
 );
 console.log("tx:", result.tx_hash);
 ```
-== Python
-```python
+
+```python [Python]
 from payskill import PayClient
 
 client = PayClient(
@@ -81,11 +82,12 @@ result = client.pay_direct(
 )
 print("tx:", result.tx_hash)
 ```
-== CLI
-```bash
+
+```bash [CLI]
 pay direct 0xProviderAddress 5.00 --memo "invoice-42"
 # => tx_hash: 0xabc...
 ```
+
 :::
 
 ## 4. Verify

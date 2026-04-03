@@ -67,7 +67,7 @@ Tabs have two fee components:
 
 The activation fee is non-refundable and covers on-chain gas for locking funds. It is deducted from the locked balance immediately.
 
-The processing fee is deducted from the provider payout when the tab is closed or when the provider withdraws charged funds. Providers above **$50k/month volume** pay a reduced rate of **0.75%**.
+The processing fee is deducted from the provider payout when the tab is closed or when the provider withdraws charged funds. Providers above **$50k/month volume** pay a reduced rate of **0.75%**. Minimum withdrawal is $1.00 -- charges below $1.00 accumulate until the threshold is reached, and at `closeTab` all remaining charges are paid out regardless of amount.
 
 ### Effective total cost
 
@@ -144,7 +144,7 @@ pay tab topup abc123 10.00
 
 ## 4. Withdraw Charged Funds
 
-The provider can withdraw accumulated charges at any time while the tab stays open. The same 1% fee applies (identical to `closeTab`). The tab remains active for more charges after withdrawal.
+The provider can withdraw accumulated charges at any time while the tab stays open. The same 1% fee applies (identical to `closeTab`). The tab remains active for more charges after withdrawal. Minimum withdrawal: $1.00 -- charges below $1.00 accumulate until the threshold is reached. At `closeTab`, all remaining charges are paid out regardless of amount.
 
 ::: code-group
 

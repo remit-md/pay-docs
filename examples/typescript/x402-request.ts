@@ -1,5 +1,5 @@
 /**
- * Runnable example: x402 Request (direct + tab settlement)
+ * Runnable example: x402 Request (direct settlement, v2 wire format)
  *
  * Usage:
  *   PAYSKILL_KEY=0x... npx tsx x402-request.ts
@@ -18,20 +18,34 @@ async function main() {
   const key = process.env.PAYSKILL_KEY;
   if (!key) throw new Error("Set PAYSKILL_KEY env var");
 
-  // Start a local test server that returns 402
+  // Start a local test server that returns v2 402
   const server = createServer((req, res) => {
-    const tx = req.headers["x-payment-tx"];
-    if (tx && typeof tx === "string" && tx.length > 0) {
+    const sig = req.headers["payment-signature"];
+    if (sig && typeof sig === "string" && sig.length > 0) {
       res.writeHead(200, { "Content-Type": "application/json" });
       res.end(JSON.stringify({ content: "premium data", paid: true }));
     } else {
-      res.writeHead(402, { "Content-Type": "application/json" });
-      res.end(JSON.stringify({
-        scheme: "exact",
-        amount: 1_000_000,  // $1.00
-        to: "0x000000000000000000000000000000000000dEaD",
-        settlement: "direct",
-      }));
+      // v2 PaymentRequired
+      const paymentRequired = {
+        x402Version: 2,
+        resource: { url: "/data", mimeType: "application/json" },
+        accepts: [{
+          scheme: "exact",
+          network: "eip155:84532",
+          amount: "1000000",
+          asset: "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+          payTo: "0x000000000000000000000000000000000000dEaD",
+          maxTimeoutSeconds: 60,
+          extra: { name: "USDC", version: "2", facilitator: "https://testnet.pay-skill.com/x402", settlement: "direct" },
+        }],
+        extensions: {},
+      };
+      const encoded = Buffer.from(JSON.stringify(paymentRequired)).toString("base64");
+      res.writeHead(402, {
+        "Content-Type": "application/json",
+        "PAYMENT-REQUIRED": encoded,
+      });
+      res.end(JSON.stringify(paymentRequired));
     }
   });
 

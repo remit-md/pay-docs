@@ -1,5 +1,5 @@
 """
-Runnable example: x402 Request
+Runnable example: x402 Request (v2 wire format)
 
 Usage:
     PAYSKILL_KEY=0x... python x402_request.py
@@ -9,6 +9,7 @@ Starts a local 402 test server, then auto-pays via PayClient.request().
 
 import os
 import json
+import base64
 import threading
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from payskill import PayClient
@@ -19,23 +20,39 @@ ROUTER = "0x24F26eCb1f46451994c59585817e87896749935D"
 
 class Handler(BaseHTTPRequestHandler):
     def do_GET(self) -> None:
-        tx = self.headers.get("X-Payment-Tx", "")
-        if tx:
+        sig = self.headers.get("Payment-Signature", "")
+        if sig:
             self.send_response(200)
             self.send_header("Content-Type", "application/json")
             self.end_headers()
             self.wfile.write(json.dumps({"content": "premium data", "paid": True}).encode())
         else:
-            body = json.dumps({
-                "scheme": "exact",
-                "amount": 1_000_000,
-                "to": "0x000000000000000000000000000000000000dEaD",
-                "settlement": "direct",
-            })
+            # v2 PaymentRequired
+            payment_required = {
+                "x402Version": 2,
+                "resource": {"url": "/data", "mimeType": "application/json"},
+                "accepts": [{
+                    "scheme": "exact",
+                    "network": "eip155:84532",
+                    "amount": "1000000",
+                    "asset": "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+                    "payTo": "0x000000000000000000000000000000000000dEaD",
+                    "maxTimeoutSeconds": 60,
+                    "extra": {
+                        "name": "USDC",
+                        "version": "2",
+                        "facilitator": "https://testnet.pay-skill.com/x402",
+                        "settlement": "direct",
+                    },
+                }],
+                "extensions": {},
+            }
+            encoded = base64.b64encode(json.dumps(payment_required).encode()).decode()
             self.send_response(402)
             self.send_header("Content-Type", "application/json")
+            self.send_header("PAYMENT-REQUIRED", encoded)
             self.end_headers()
-            self.wfile.write(body.encode())
+            self.wfile.write(json.dumps(payment_required).encode())
 
     def log_message(self, fmt: str, *args: object) -> None:
         pass  # suppress logs

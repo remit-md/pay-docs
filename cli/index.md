@@ -227,8 +227,8 @@ pay request --no-pay https://api.example.com/data
 **Auto Content-Type:** when `-d` is used and no `Content-Type` header is set, defaults to `application/json`.
 
 If the server returns 402 Payment Required:
-- **Direct settlement:** signs EIP-3009 TransferWithAuthorization, retries with `PAYMENT-SIGNATURE` header
-- **Tab settlement:** finds or opens a tab, charges it, retries with `PAYMENT-SIGNATURE` header
+- **Direct settlement:** signs EIP-3009, constructs v2 PaymentPayload with `payload.signature` + `payload.authorization`, retries with `PAYMENT-SIGNATURE: base64(PaymentPayload)`
+- **Tab settlement:** finds or opens a tab, charges it, retries with `PAYMENT-SIGNATURE: base64(PaymentPayload)` containing `extensions.pay.tabId`
 
 The retry uses the same method, headers, and body as the original request.
 

@@ -205,9 +205,9 @@ const response = await client.request("https://api.example.com/data");
 
 If the upstream returns **402 Payment Required**, the SDK automatically:
 
-1. Reads `settlement`, `amount`, and `to` from the 402 response body
-2. If `settlement === "tab"`: finds or opens a tab, charges it, retries with `X-Payment-Tab` and `X-Payment-Charge` headers
-3. If `settlement === "direct"`: calls `payDirect()`, retries with `X-Payment-Tx` header
+1. Decodes the `PAYMENT-REQUIRED` header (base64 -> JSON), reads `accepts[0].extra.settlement`, `accepts[0].amount`, and `accepts[0].payTo`
+2. If `settlement === "tab"`: finds or opens a tab, charges it, retries with `PAYMENT-SIGNATURE: base64(v2 PaymentPayload)` containing tab proof in `extensions.pay`
+3. If `settlement === "direct"`: calls `payDirect()`, retries with `PAYMENT-SIGNATURE: base64(v2 PaymentPayload)` containing direct proof in `payload`
 
 Options:
 

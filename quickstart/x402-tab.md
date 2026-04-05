@@ -5,8 +5,8 @@ Use tabs for repeated micropayments to an HTTP API. The SDK auto-opens a tab on 
 ## How It Works
 
 1. Agent requests data from a provider
-2. Provider returns `402` with `settlement: "tab"`
-3. SDK auto-opens a tab (10x the per-call price, min $5), charges it, and retries
+2. Provider returns `402` with base64-encoded v2 requirements (`accepts[0].extra.settlement === "tab"`)
+3. SDK auto-opens a tab (10x the per-call price, min $5), charges it, retries with `PAYMENT-SIGNATURE`
 4. On subsequent 402s to the same provider, the SDK reuses the existing tab
 
 ## Provider Setup
@@ -14,20 +14,29 @@ Use tabs for repeated micropayments to an HTTP API. The SDK auto-opens a tab on 
 Return 402 with `settlement: "tab"`:
 
 ```javascript
+// Express example — or use pay-gate for zero-code setup
 app.get("/api/data", (req, res) => {
-  const tabId = req.headers["x-payment-tab"];
-  const chargeId = req.headers["x-payment-charge"];
-
-  if (!tabId || !chargeId) {
-    return res.status(402).json({
-      scheme: "exact",
-      amount: 100_000,              // $0.10 per call
-      to: "0xYourProviderWallet",
-      settlement: "tab",
-    });
+  if (!req.headers["payment-signature"]) {
+    const paymentRequired = {
+      x402Version: 2,
+      resource: { url: `https://${req.hostname}${req.path}`, mimeType: "application/json" },
+      accepts: [{
+        scheme: "exact",
+        network: "eip155:8453",
+        amount: "100000",                   // $0.10 per call
+        asset: "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        payTo: "0xYourProviderWallet",
+        maxTimeoutSeconds: 60,
+        extra: { name: "USDC", version: "2", facilitator: "https://pay-skill.com/x402", settlement: "tab" },
+      }],
+      extensions: {},
+    };
+    const encoded = Buffer.from(JSON.stringify(paymentRequired)).toString("base64");
+    res.set("PAYMENT-REQUIRED", encoded);
+    return res.status(402).json({ error: "payment_required", message: "$0.10 per call" });
   }
   // Payment verified — serve content
-  res.json({ data: "premium content", chargeId });
+  res.json({ data: "premium content" });
 });
 ```
 
@@ -79,6 +88,12 @@ r3 = client.request("https://provider.example.com/api/data")
 pay request https://provider.example.com/api/data
 pay request https://provider.example.com/api/data
 pay request https://provider.example.com/api/data
+
+# POST with custom headers — same tab reuse
+pay request -X POST \
+  -H "Authorization: Bearer tok" \
+  -d '{"prompt":"hello"}' \
+  https://provider.example.com/api/chat
 ```
 
 :::

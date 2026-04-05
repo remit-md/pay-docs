@@ -32,7 +32,7 @@ Agent hits your API without payment:
 
 ```
 GET /api/v1/data → 402 Payment Required
-  PAYMENT-REQUIRED: base64({ scheme: "exact", amount: "10000", ... })
+  PAYMENT-REQUIRED: base64({ x402Version: 2, accepts: [{ scheme: "exact", amount: "10000", payTo: "0x...", ... }], ... })
 ```
 
 The agent's SDK parses the 402, pays automatically, and retries.

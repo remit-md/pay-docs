@@ -5,24 +5,35 @@ Pay for HTTP API calls automatically using the x402 protocol. When a server retu
 ## How It Works
 
 1. Agent requests `GET /api/data` from a provider
-2. Provider returns `402` with payment requirements: `{ settlement: "direct", amount: 1000000, to: "0x..." }`
-3. SDK automatically pays via `payDirect`, then retries the request with an `X-Payment-Tx` header
-4. Provider verifies payment and returns the data
+2. Provider returns `402` with base64-encoded v2 payment requirements in `PAYMENT-REQUIRED` header
+3. SDK decodes requirements, reads `accepts[0].extra.settlement === "direct"`, pays via `payDirect`
+4. SDK retries with `PAYMENT-SIGNATURE: base64(v2 PaymentPayload)` — provider verifies and returns data
 
 ## Provider Setup
 
 Add a facilitator URL to your server. When a request lacks payment proof, return 402:
 
 ```javascript
-// Express example
+// Express example — or use pay-gate for zero-code setup
 app.get("/api/data", (req, res) => {
-  if (!req.headers["x-payment-tx"]) {
-    return res.status(402).json({
-      scheme: "exact",
-      amount: 1_000_000,          // $1.00 in micro-USDC
-      to: "0xYourProviderWallet",
-      settlement: "direct",
-    });
+  if (!req.headers["payment-signature"]) {
+    const paymentRequired = {
+      x402Version: 2,
+      resource: { url: `https://${req.hostname}${req.path}`, mimeType: "application/json" },
+      accepts: [{
+        scheme: "exact",
+        network: "eip155:8453",
+        amount: "1000000",
+        asset: "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        payTo: "0xYourProviderWallet",
+        maxTimeoutSeconds: 60,
+        extra: { name: "USDC", version: "2", facilitator: "https://pay-skill.com/x402", settlement: "direct" },
+      }],
+      extensions: {},
+    };
+    const encoded = Buffer.from(JSON.stringify(paymentRequired)).toString("base64");
+    res.set("PAYMENT-REQUIRED", encoded);
+    return res.status(402).json({ error: "payment_required", message: "$1.00 per request" });
   }
   // Payment verified — serve content
   res.json({ data: "premium content" });
@@ -66,19 +77,24 @@ print(response.json())  # { "data": "premium content" }
 ```
 
 ```bash [CLI]
+# GET
 pay request https://provider.example.com/api/data
 # => [200] {"data": "premium content"}
+
+# POST with body
+pay request -X POST -d '{"query":"test"}' https://provider.example.com/api/search
+# => [200] {"results": [...]}
 ```
 
 :::
 
 ## What Happened
 
-1. SDK sent `GET /api/data` — got `402` back
-2. SDK read the payment requirements (`$1.00` to provider via direct settlement)
+1. SDK sent `GET /api/data` — got `402` with `PAYMENT-REQUIRED` header
+2. SDK decoded base64 v2 requirements, read `accepts[0].extra.settlement === "direct"`
 3. SDK called `payDirect` to send $1.00 to the provider
-4. SDK retried the original request with `X-Payment-Tx: 0xabc...`
-5. Provider verified the payment hash and returned the content
+4. SDK retried with `PAYMENT-SIGNATURE: base64(v2 PaymentPayload)` containing the transaction proof
+5. Provider verified payment and returned the content
 
 ## Next Steps
 

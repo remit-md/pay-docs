@@ -193,7 +193,7 @@ If you want full control, implement the x402 V2 protocol in your backend.
 #### 1. Return 402 with PAYMENT-REQUIRED header
 
 ```javascript
-// Express example
+// Express example — or use pay-gate for zero-code setup
 app.get("/api/premium-data", (req, res) => {
   const paymentSig = req.headers["payment-signature"];
 
@@ -202,17 +202,31 @@ app.get("/api/premium-data", (req, res) => {
     return res.json({ data: "premium content" });
   }
 
-  // No payment — return 402 with x402 V2 requirements
-  const requirements = {
-    scheme: "exact",
-    amount: "1000000",                   // $1.00 in micro-USDC
-    to: "0xYourProviderWallet",
-    settlement: "direct",                // or "tab" for micropayments
-    facilitator: "https://pay-skill.com/x402",
-    network: "base",
+  // No payment — return 402 with v2 PaymentRequired
+  const paymentRequired = {
+    x402Version: 2,
+    resource: {
+      url: `https://${req.hostname}${req.path}`,
+      mimeType: "application/json",
+    },
+    accepts: [{
+      scheme: "exact",
+      network: "eip155:8453",
+      amount: "1000000",                   // $1.00 in micro-USDC
+      asset: "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+      payTo: "0xYourProviderWallet",
+      maxTimeoutSeconds: 60,
+      extra: {
+        name: "USDC",
+        version: "2",
+        facilitator: "https://pay-skill.com/x402",
+        settlement: "direct",              // or "tab" for micropayments
+      },
+    }],
+    extensions: {},
   };
 
-  const encoded = Buffer.from(JSON.stringify(requirements)).toString("base64");
+  const encoded = Buffer.from(JSON.stringify(paymentRequired)).toString("base64");
   res.set("PAYMENT-REQUIRED", encoded);
   res.status(402).json({
     error: "payment_required",

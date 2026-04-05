@@ -54,7 +54,7 @@ pay tab open 0xProviderAddress 20.00 --max-charge 2.00
 
 :::
 
-The activation fee (`max($0.10, 1% of $20) = $0.20`) is deducted immediately.
+The activation fee (`max($0.50, 1% of $20) = $0.50`) is deducted immediately.
 
 ## Fees
 
@@ -62,10 +62,10 @@ Tabs have two fee components:
 
 | Fee | When | Formula | Discountable? |
 |-----|------|---------|---------------|
-| **Activation fee** | Paid at open | `max($0.10, 1% of tab amount)` | No |
-| **Processing fee** | Paid at close or withdraw | 1% of charged amount | Yes |
+| **Activation fee** | Paid at open | `max($0.50, 1% of tab amount)` | No |
+| **Processing fee** | Paid at close or withdraw | `max($0.002, 1%)` per charge | Yes |
 
-The activation fee is non-refundable and covers on-chain gas for locking funds. It is deducted from the locked balance immediately.
+The activation fee is non-refundable and covers on-chain gas for the tab lifecycle. It is deducted from the locked balance immediately. The $0.002 per-charge floor applies below $0.20/charge; above $0.20 the standard 1% rate applies.
 
 The processing fee is deducted from the provider payout when the tab is closed or when the provider withdraws charged funds. Providers above **$50k/month volume** pay a reduced rate of **0.75%**. Minimum withdrawal is $1.00 -- charges below $1.00 accumulate until the threshold is reached, and at `closeTab` all remaining charges are paid out regardless of amount.
 
@@ -188,8 +188,8 @@ pay tab close abc123
 
 With $2.00 total charged from a $20.00 tab:
 - **Provider receives:** `$2.00 × 0.99 = $1.98` (processing fee deducted)
-- **Fee wallet receives:** `$0.20 (activation) + $0.02 (processing) = $0.22`
-- **Agent receives:** `$20.00 − $0.20 (activation) − $2.00 (charges) = $17.80`
+- **Fee wallet receives:** `$0.50 (activation) + $0.02 (processing) = $0.52`
+- **Agent receives:** `$20.00 − $0.50 (activation) − $2.00 (charges) = $17.50`
 
 See [Fees](#fees) for full breakdown including volume discounts.
 

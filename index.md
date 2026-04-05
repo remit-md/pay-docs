@@ -20,7 +20,7 @@ features:
   - title: Direct Payments
     details: One-shot USDC transfers. Agent sends, provider receives. $1 minimum, 1% provider fee.
   - title: Tabs
-    details: Pre-funded metered accounts. Open a tab, charge per use, close when done. Charges cost ~$0.000004 each.
+    details: Pre-funded metered accounts. Open a tab, charge per use, close when done. Charges batched at near-zero gas cost.
   - title: x402 Paywalls
     details: HTTP 402 payment protocol. Provider returns 402, agent pays automatically. Direct or tab settlement.
 ---

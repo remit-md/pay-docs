@@ -139,7 +139,7 @@ pay tab open 0xProviderAddress 20.00 --max-charge 2.00
 | `--max-charge <AMOUNT>` | Maximum charge per call |
 
 - **Minimum:** $5.00
-- **Activation fee:** max($0.10, 1% of amount)
+- **Activation fee:** max($0.50, 1% of amount)
 
 #### tab charge
 
@@ -187,15 +187,50 @@ pay tab list
 
 ### request
 
-Make an HTTP request with automatic 402 payment handling.
+Make an HTTP request with automatic x402 payment handling. Supports all standard HTTP methods, custom headers, and request bodies — like curl, but with built-in x402 payments.
 
 ```bash
+# Simple GET (default)
 pay request https://api.example.com/data
+
+# POST with JSON body
+pay request -X POST -d '{"query":"test"}' https://api.example.com/search
+
+# Custom headers
+pay request -H "Authorization: Bearer tok123" https://api.example.com/data
+
+# Body from file, output to file, silent mode
+pay request -X PUT -d @payload.json -o response.json -s https://api.example.com/item/1
+
+# Debug: show request/response headers
+pay request -v https://api.example.com/data
+
+# Skip x402 payment (raw request)
+pay request --no-pay https://api.example.com/data
 ```
 
+| Flag | Short | Description | Default |
+|------|-------|-------------|---------|
+| `--request` | `-X` | HTTP method (GET, POST, PUT, DELETE, PATCH, HEAD) | GET (POST if `-d`) |
+| `--header` | `-H` | Add header, repeatable: `"Key: Value"` | — |
+| `--data` | `-d` | Request body; prefix with `@` to read from file | — |
+| `--output` | `-o` | Write response body to file | stdout |
+| `--verbose` | `-v` | Print request/response headers to stderr | off |
+| `--silent` | `-s` | Suppress status messages, output body only | off |
+| `--no-location` | — | Disable following redirects | redirects on |
+| `--connect-timeout` | — | Connection timeout in seconds | 10 |
+| `--max-time` | — | Max total request time in seconds | 30 |
+| `--no-pay` | — | Skip x402 payment handling | off |
+
+**Method inference:** `-d` without `-X` implies POST (curl convention). Explicit `-X` always wins.
+
+**Auto Content-Type:** when `-d` is used and no `Content-Type` header is set, defaults to `application/json`.
+
 If the server returns 402 Payment Required:
-- **Direct settlement:** signs EIP-3009 TransferWithAuthorization, retries with `X-Payment` header
-- **Tab settlement:** finds or opens a tab, charges it, retries with `X-Payment-Tab` and `X-Payment-Charge` headers
+- **Direct settlement:** signs EIP-3009 TransferWithAuthorization, retries with `PAYMENT-SIGNATURE` header
+- **Tab settlement:** finds or opens a tab, charges it, retries with `PAYMENT-SIGNATURE` header
+
+The retry uses the same method, headers, and body as the original request.
 
 ### webhook
 

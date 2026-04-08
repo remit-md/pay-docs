@@ -31,17 +31,21 @@ proxy:
 # Route definitions. First match wins. Order matters.
 routes:
   - path: "/api/v1/premium/*"        # glob pattern
+    method: "GET"
     price: "0.01"                    # $0.01 per call
     settlement: "tab"                # tab-backed micropayment
+    hint: "?q={query}&limit=50"      # free-form hint for agents
 
   - path: "/api/v1/report"
     method: "POST"                   # match specific HTTP method
     price: "5.00"
     settlement: "direct"             # on-chain per call
+    hint: '{"start_date": "YYYY-MM-DD", "end_date": "YYYY-MM-DD"}'
 
   - path: "/api/v1/generate/*"
     price_endpoint: "http://localhost:8080/internal/pricing"
     settlement: "tab"                # dynamic pricing
+    hint: '{"prompt": "string", "model": "gpt-4"}'
 
   - path: "/api/v1/health"
     free: true                       # no payment required
@@ -123,6 +127,7 @@ Store routes as JSON in a KV namespace. Updatable without redeployment:
 | `free` | boolean | No | Skip payment for this route |
 | `allowlist` | string[] | No | Agent addresses that skip payment |
 | `price_endpoint` | string | No | URL for dynamic pricing |
+| `hint` | string | No | Free-form usage hint for agents (e.g. `"?q={city}"`, `'{"prompt": "string"}'`) |
 | `proxy_rewrite` | string | No | Rewrite path before proxying (Worker only) |
 | `proxy_params` | object | No | Query params to add to proxied request (Worker only) |
 

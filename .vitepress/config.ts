@@ -45,6 +45,7 @@ export default defineConfig({
         items: [
           { text: "Introduction", link: "/" },
           { text: "Contracts & Networks", link: "/contracts" },
+          { text: "Framework Integrations", link: "/integrations" },
         ],
       },
       {

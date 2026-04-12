@@ -1,6 +1,6 @@
 # Quickstart: AP2 Mandate-Backed Payment
 
-Use AP2 mandates to constrain agent spending. A mandate sets bounds on what an agent can pay — maximum amount, allowed currency, expiry — and the server validates every payment against it.
+Use AP2 mandates to constrain agent spending. A mandate sets bounds on what an agent can pay -- maximum amount, allowed currency, expiry -- and the server validates every payment against it.
 
 ## How It Works
 
@@ -34,7 +34,7 @@ A mandate defines:
 ## Send a Mandate-Constrained Payment
 
 ```typescript
-const response = await fetch("https://testnet.pay-skill.com/a2a", {
+const response = await fetch("https://pay-skill.com/a2a", {
   method: "POST",
   headers: { "Content-Type": "application/json" },
   body: JSON.stringify({
@@ -104,5 +104,11 @@ Mandates let principals delegate spending authority to agents with guardrails:
 
 ## Next Steps
 
-- [Direct Payment](./direct) — basics of sending USDC
-- [Tab Lifecycle](./tab) — metered billing for ongoing work
+- [Direct Payment](./direct) -- basics of sending USDC
+- [Tab Lifecycle](./tab) -- metered billing for ongoing work
+
+::: details Using testnet?
+
+Replace `pay-skill.com` with `testnet.pay-skill.com` in all URLs. Set `PAYSKILL_TESTNET=1` env var for SDKs.
+
+:::

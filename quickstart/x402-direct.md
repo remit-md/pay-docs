@@ -1,20 +1,20 @@
 # Quickstart: x402 Direct Settlement
 
-Pay for HTTP API calls automatically using the x402 protocol. When a server returns `402 Payment Required`, the client pays and retries — no manual payment logic needed.
+Pay for HTTP API calls automatically using the x402 protocol. When a server returns `402 Payment Required`, the client pays and retries -- no manual payment logic needed.
 
 ## How It Works
 
 1. Agent requests `GET /api/data` from a provider
 2. Provider returns `402` with base64-encoded v2 payment requirements in `PAYMENT-REQUIRED` header
-3. Client decodes requirements, reads `accepts[0].extra.settlement === "direct"`, pays via `payDirect`
-4. Client retries with `PAYMENT-SIGNATURE: base64(v2 PaymentPayload)` — provider verifies and returns data
+3. Client decodes requirements, reads `accepts[0].extra.settlement === "direct"`, pays via `send`
+4. Client retries with `PAYMENT-SIGNATURE: base64(v2 PaymentPayload)` -- provider verifies and returns data
 
 ## Provider Setup
 
 Add a facilitator URL to your server. When a request lacks payment proof, return 402:
 
 ```javascript
-// Express example — or use pay-gate for zero-code setup
+// Express example -- or use pay-gate for zero-code setup
 app.get("/api/data", (req, res) => {
   if (!req.headers["payment-signature"]) {
     const paymentRequired = {
@@ -22,9 +22,9 @@ app.get("/api/data", (req, res) => {
       resource: { url: `https://${req.hostname}${req.path}`, mimeType: "application/json" },
       accepts: [{
         scheme: "exact",
-        network: "eip155:8453",              // mainnet; use /api/v1/contracts → chain_id
+        network: "eip155:8453",
         amount: "1000000",
-        asset: "0x...",                        // USDC address from /api/v1/contracts → usdc
+        asset: "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",  // USDC on Base
         payTo: "0xYourProviderWallet",
         maxTimeoutSeconds: 60,
         extra: { name: "USDC", version: "2", facilitator: "https://pay-skill.com/x402", settlement: "direct" },
@@ -35,7 +35,7 @@ app.get("/api/data", (req, res) => {
     res.set("PAYMENT-REQUIRED", encoded);
     return res.status(402).json({ error: "payment_required", message: "$1.00 per request" });
   }
-  // Payment verified — serve content
+  // Payment verified -- serve content
   res.json({ data: "premium content" });
 });
 ```
@@ -55,42 +55,23 @@ pay request -X POST -d '{"query":"test"}' https://provider.example.com/api/searc
 ```
 
 ```typescript [TypeScript]
-import { PayClient } from "@pay-skill/sdk";
+import { Wallet } from "@pay-skill/sdk";
 
-// Fetch contract addresses — never hardcode these
-const contracts = await fetch("https://testnet.pay-skill.com/api/v1/contracts")
-  .then(r => r.json());
+const wallet = await Wallet.create();  // OS keychain (same key as CLI)
 
-const client = new PayClient({
-  apiUrl: "https://testnet.pay-skill.com/api/v1",
-  privateKey: process.env.PAYSKILL_KEY!,
-  chainId: contracts.chain_id,
-  routerAddress: contracts.router,
-});
-
-// One line — payment is automatic
-const response = await client.request("https://provider.example.com/api/data");
+// One line -- payment is automatic
+const response = await wallet.request("https://provider.example.com/api/data");
 const data = await response.json();
 console.log(data); // { data: "premium content" }
 ```
 
 ```python [Python]
-import httpx
-from payskill import PayClient
+from payskill import Wallet
 
-# Fetch contract addresses — never hardcode these
-contracts = httpx.get("https://testnet.pay-skill.com/api/v1/contracts").json()
+wallet = Wallet()
 
-client = PayClient(
-    api_url="https://testnet.pay-skill.com/api/v1",
-    signer="raw",
-    private_key="0xYOUR_KEY",
-    chain_id=contracts["chain_id"],
-    router_address=contracts["router"],
-)
-
-# One line — payment is automatic
-response = client.request("https://provider.example.com/api/data")
+# One line -- payment is automatic
+response = wallet.request("https://provider.example.com/api/data")
 print(response.json())  # { "data": "premium content" }
 ```
 
@@ -98,7 +79,7 @@ print(response.json())  # { "data": "premium content" }
 
 ## What Happened
 
-1. Client sent `GET /api/data` — got `402` with `PAYMENT-REQUIRED` header
+1. Client sent `GET /api/data` -- got `402` with `PAYMENT-REQUIRED` header
 2. Client decoded base64 v2 requirements, read `accepts[0].extra.settlement === "direct"`
 3. Client signed an EIP-3009 `transferWithAuthorization` for $1.00 to the provider
 4. Client retried with `PAYMENT-SIGNATURE: base64(v2 PaymentPayload)` containing the signed authorization
@@ -106,4 +87,10 @@ print(response.json())  # { "data": "premium content" }
 
 ## Next Steps
 
-- [x402 Tab Settlement](./x402-tab) — use tabs for repeated micropayments (cheaper per call)
+- [x402 Tab Settlement](./x402-tab) -- use tabs for repeated micropayments (cheaper per call)
+
+::: details Using testnet?
+
+Set `PAYSKILL_TESTNET=1` env var, or pass `--testnet` to CLI commands. Use `pay mint 100` to get testnet USDC.
+
+:::

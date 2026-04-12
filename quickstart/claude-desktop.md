@@ -32,25 +32,7 @@ Add to your Claude Desktop config file:
 
 :::
 
-Restart Claude Desktop after saving. A wallet is auto-generated and stored in the OS keychain on first run.
-
-## Testnet
-
-To use Base Sepolia testnet instead of mainnet:
-
-```json
-{
-  "mcpServers": {
-    "pay": {
-      "command": "npx",
-      "args": ["-y", "@pay-skill/mcp"],
-      "env": {
-        "PAY_NETWORK": "testnet"
-      }
-    }
-  }
-}
-```
+Restart Claude Desktop after saving. A wallet is auto-generated and stored in the OS keychain on first run. Mainnet by default.
 
 ## Import existing wallet
 
@@ -88,7 +70,7 @@ Once configured, Claude has access to 15 tools:
 | `pay_send` | Send a one-shot payment to an address |
 | `pay_fund` | Generate a funding link |
 | `pay_withdraw` | Generate a withdrawal link |
-| `pay_mint` | Mint testnet USDC (testnet only) |
+| `pay_mint` | Mint USDC (testnet only) |
 | `pay_webhook_register` | Register a webhook |
 | `pay_webhook_list` | List registered webhooks |
 
@@ -130,3 +112,23 @@ The MCP server works with any client that supports stdio transport:
   }
 }
 ```
+
+::: details Using testnet?
+
+Add `"PAY_NETWORK": "testnet"` to the `env` object in your config. Use `pay_mint` to get testnet USDC.
+
+```json
+{
+  "mcpServers": {
+    "pay": {
+      "command": "npx",
+      "args": ["-y", "@pay-skill/mcp"],
+      "env": {
+        "PAY_NETWORK": "testnet"
+      }
+    }
+  }
+}
+```
+
+:::

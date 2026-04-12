@@ -1,6 +1,6 @@
 # Quickstart: A2A + Direct Payment
 
-Combine Google's Agent-to-Agent (A2A) protocol with Pay direct payments. The agent sends a task via A2A with a payment part — the server validates payment before executing the task.
+Combine Google's Agent-to-Agent (A2A) protocol with Pay direct payments. The agent sends a task via A2A with a payment part -- the server validates payment before executing the task.
 
 ## How It Works
 
@@ -12,7 +12,7 @@ Combine Google's Agent-to-Agent (A2A) protocol with Pay direct payments. The age
 ## Discover the Agent Card
 
 ```bash
-curl https://testnet.pay-skill.com/.well-known/agent-card.json
+curl https://pay-skill.com/.well-known/agent-card.json
 ```
 
 The agent card describes the server's A2A capabilities, supported payment methods, and task types.
@@ -26,15 +26,11 @@ The A2A endpoint requires EIP-712 authentication. Include `X-Pay-Agent`, `X-Pay-
 ```typescript [TypeScript]
 import { buildAuthHeaders } from "@pay-skill/sdk";
 
-const contracts = await fetch("https://testnet.pay-skill.com/api/v1/contracts")
-  .then(r => r.json());
-
 const authHeaders = await buildAuthHeaders(
   process.env.PAYSKILL_KEY!, "POST", "/a2a",
-  { chainId: contracts.chain_id, routerAddress: contracts.router },
 );
 
-const response = await fetch("https://testnet.pay-skill.com/a2a", {
+const response = await fetch("https://pay-skill.com/a2a", {
   method: "POST",
   headers: { "Content-Type": "application/json", ...authHeaders },
   body: JSON.stringify({
@@ -73,7 +69,7 @@ console.log(result.result.task.status); // "completed"
 import httpx
 
 response = httpx.post(
-    "https://testnet.pay-skill.com/a2a",
+    "https://pay-skill.com/a2a",
     json={
         "jsonrpc": "2.0",
         "id": "1",
@@ -106,12 +102,18 @@ print(response.json()["result"]["task"]["status"])
 ## Check Task Status
 
 ```bash
-curl -X POST https://testnet.pay-skill.com/a2a \
+curl -X POST https://pay-skill.com/a2a \
   -H "Content-Type: application/json" \
   -d '{"jsonrpc":"2.0","id":"2","method":"tasks/get","params":{"id":"TASK_ID"}}'
 ```
 
 ## Next Steps
 
-- [A2A + Tab](./a2a-tab) — metered billing for long-running A2A tasks
-- [AP2 Mandate](./ap2) — constrained payments with spending limits
+- [A2A + Tab](./a2a-tab) -- metered billing for long-running A2A tasks
+- [AP2 Mandate](./ap2) -- constrained payments with spending limits
+
+::: details Using testnet?
+
+Replace `pay-skill.com` with `testnet.pay-skill.com` in all URLs. Set `PAYSKILL_TESTNET=1` env var for SDKs.
+
+:::

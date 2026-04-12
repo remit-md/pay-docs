@@ -15,22 +15,13 @@ Use A2A tasks with tab-backed metered billing. The agent opens a tab, and the pr
 
 ```bash [CLI]
 # Open a $50 tab with $5 max per charge
-pay tab open 0xProviderAddress 50.00 --max-charge 5.00 --testnet
+pay tab open 0xProviderAddress 50.00 --max-charge 5.00
 ```
 
 ```typescript [TypeScript]
 import { Wallet } from "@pay-skill/sdk";
 
-// Fetch contract addresses — never hardcode these
-const contracts = await fetch("https://testnet.pay-skill.com/api/v1/contracts")
-  .then(r => r.json());
-
-const agent = new Wallet({
-  privateKey: process.env.AGENT_KEY!,
-  chain: "base-sepolia",
-  apiUrl: "https://testnet.pay-skill.com/api/v1",
-  routerAddress: contracts.router,
-});
+const agent = await Wallet.create();  // OS keychain (same key as CLI)
 
 // Open a $50 tab with $5 max per charge
 const tab = await agent.openTab("0xProviderAddress", 50, 5);
@@ -38,20 +29,11 @@ console.log("tab:", tab.tab_id);
 ```
 
 ```python [Python]
-import httpx
-from payskill import PayClient
+from payskill import Wallet
 
-# Fetch contract addresses — never hardcode these
-contracts = httpx.get("https://testnet.pay-skill.com/api/v1/contracts").json()
+agent = Wallet()
 
-agent = PayClient(
-    api_url="https://testnet.pay-skill.com/api/v1",
-    signer="raw", private_key="0xAGENT_KEY",
-    chain_id=contracts["chain_id"],
-    router_address=contracts["router"],
-)
-
-tab = agent.open_tab("0xProviderAddress", 50_000_000, 5_000_000)
+tab = agent.open_tab("0xProviderAddress", 50, 5)
 print("tab:", tab.tab_id)
 ```
 
@@ -60,7 +42,7 @@ print("tab:", tab.tab_id)
 ## Send an A2A Task with Tab Reference
 
 ```typescript
-const response = await fetch("https://testnet.pay-skill.com/a2a", {
+const response = await fetch("https://pay-skill.com/a2a", {
   method: "POST",
   headers: { "Content-Type": "application/json" },
   body: JSON.stringify({
@@ -71,7 +53,7 @@ const response = await fetch("https://testnet.pay-skill.com/a2a", {
       message: {
         role: "user",
         parts: [
-          { type: "text", text: "Analyze this dataset — charge per row processed" },
+          { type: "text", text: "Analyze this dataset -- charge per row processed" },
           {
             type: "data",
             mimeType: "application/json",
@@ -115,4 +97,10 @@ await agent.closeTab(tab.tab_id);
 
 ## Next Steps
 
-- [AP2 Mandate](./ap2) — add spending constraints to payments
+- [AP2 Mandate](./ap2) -- add spending constraints to payments
+
+::: details Using testnet?
+
+Replace `pay-skill.com` with `testnet.pay-skill.com` in all URLs. Pass `--testnet` to CLI commands. Set `PAYSKILL_TESTNET=1` env var for SDKs.
+
+:::

@@ -35,7 +35,7 @@ prevention. The 1% rate kicks in at $10+ tabs; a $5 tab pays 2%.
 |-----------|---------|-----|
 | Direct payment | $1.00 | Gas (~$0.004) covered by 1% fee |
 | Tab open | $5.00 | Activation fee ($0.10) covers lifecycle gas |
-| Tab charge | None | Batched — ~$0.000006 effective per charge |
+| Tab charge | None | Batched — gas amortized across charges |
 
 ## Rate limits
 
@@ -54,7 +54,7 @@ All gas paid by the protocol. Agents never hold ETH.
 |-----------|------|
 | Direct payment (permit + transfer) | ~$0.002–$0.004 |
 | Tab open (permit + lock) | ~$0.002–$0.004 |
-| Tab charge batch (~100/batch) | ~$0.0006/batch (~$0.000006/charge) |
+| Tab charge batch | Negligible (amortized) |
 | Tab close (3 USDC transfers) | ~$0.003–$0.006 |
 | Tab top-up (permit + transfer) | ~$0.002–$0.004 |
 

@@ -19,7 +19,7 @@ Requires Python 3.10+.
 ```python
 from payskill import Wallet
 
-wallet = Wallet()  # reads PAYSKILL_KEY env var
+wallet = Wallet.create()  # OS keychain (same key as CLI)
 
 # Send $5 to a provider
 result = wallet.send("0xProvider...", 5.0, memo="invoice-42")
@@ -37,14 +37,14 @@ response = wallet.request("https://api.example.com/data")
 ```python
 from payskill import Wallet
 
-# Zero-config (reads PAYSKILL_KEY env var)
+# OS keychain (recommended -- same key as CLI)
+wallet = Wallet.create()
+
+# Environment variable (CI/containers -- reads PAYSKILL_KEY)
 wallet = Wallet()
 
-# Explicit key
+# Explicit key (testing only)
 wallet = Wallet(private_key="0xabc...")
-
-# OS keychain (reads key stored by `pay` CLI) — tries keychain first, then env
-wallet = Wallet.create()
 
 # Env var only
 wallet = Wallet.from_env()

@@ -20,26 +20,20 @@ cargo install pay-cli
 # Initialize wallet (generates keypair, stores in OS keychain)
 pay init
 
-# Show current network
-pay network
-
-# Switch to testnet for development
-pay network testnet
-
-# Mint testnet USDC (testnet only)
-pay mint 100.00
+# Fund your wallet with USDC
+pay fund
 
 # Check balance
 pay status
 
-# Show wallet address
-pay address
-
 # Send $5 to a provider
 pay direct 0xProvider... 5.00
+
+# Make a paid API call (handles x402 automatically)
+pay request https://api.example.com/data
 ```
 
-Fresh installs default to **Base mainnet**. Use `pay network testnet` to switch to Base Sepolia for development.
+Defaults to **Base mainnet**. No network configuration needed for production.
 
 ## Global Flags
 

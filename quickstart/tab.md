@@ -4,7 +4,7 @@ Open a pre-funded tab, charge it multiple times, then close. Tabs are ideal for 
 
 ## Prerequisites
 
-- Agent wallet with testnet USDC (see [Direct Payment](./direct) for setup)
+- Agent wallet with USDC (run `pay init`, then `pay fund`)
 - Provider wallet (a second private key)
 
 ## 1. Open a Tab
@@ -19,16 +19,7 @@ pay tab open 0xProviderAddress 20.00 --max-charge 2.00
 ```typescript [TypeScript]
 import { Wallet } from "@pay-skill/sdk";
 
-// Fetch contract addresses — never hardcode these
-const contracts = await fetch("https://testnet.pay-skill.com/api/v1/contracts")
-  .then(r => r.json());
-
-const agent = new Wallet({
-  privateKey: process.env.AGENT_KEY!,
-  chain: "base-sepolia",
-  apiUrl: "https://testnet.pay-skill.com/api/v1",
-  routerAddress: contracts.router,
-});
+const agent = await Wallet.create();  // OS keychain (same key as CLI)
 
 const tab = await agent.openTab(
   "0xProviderAddress",  // provider
@@ -39,23 +30,14 @@ console.log("tab:", tab.tab_id);
 ```
 
 ```python [Python]
-import httpx
-from payskill import PayClient
+from payskill import Wallet
 
-# Fetch contract addresses — never hardcode these
-contracts = httpx.get("https://testnet.pay-skill.com/api/v1/contracts").json()
-
-agent = PayClient(
-    api_url="https://testnet.pay-skill.com/api/v1",
-    signer="raw", private_key="0xAGENT_KEY",
-    chain_id=contracts["chain_id"],
-    router_address=contracts["router"],
-)
+agent = Wallet()
 
 tab = agent.open_tab(
     provider="0xProviderAddress",
-    amount=20_000_000,              # $20.00
-    max_charge_per_call=2_000_000,  # max $2.00/charge
+    amount=20,                  # $20.00
+    max_charge_per_call=2,      # max $2.00/charge
 )
 print("tab:", tab.tab_id)
 ```
@@ -83,17 +65,17 @@ The processing fee is deducted from the provider payout at close or during sched
 |------|-----------|------------|------------------------|
 | Standard | 1% | `max($0.002, 1%)` | ~2% |
 | High-volume (>$50k/mo) | 1% | `max($0.002, 0.75%)` | ~1.75% |
-| Direct payments | — | 1% (0.75% high-vol) | 1% (0.75%) |
+| Direct payments | -- | 1% (0.75% high-vol) | 1% (0.75%) |
 
 ### Example: $100 tab, fully charged
 
 | Step | Amount |
 |------|--------|
 | Agent locks | $100.00 |
-| Activation fee → fee wallet | $1.00 |
+| Activation fee | $1.00 |
 | Tab balance after activation | $99.00 |
-| Provider charges full $99.00 | — |
-| Processing fee (1%) → fee wallet | $0.99 |
+| Provider charges full $99.00 | -- |
+| Processing fee (1%) | $0.99 |
 | Provider receives | $98.01 |
 | Agent refund | $0.00 |
 
@@ -109,30 +91,19 @@ pay tab charge abc123 1.00
 ```
 
 ```typescript [TypeScript]
-const provider = new Wallet({
-  privateKey: process.env.PROVIDER_KEY!,
-  chain: "base-sepolia",
-  apiUrl: "https://testnet.pay-skill.com/api/v1",
-  routerAddress: contracts.router,  // from /api/v1/contracts
-});
+const provider = await Wallet.create();  // provider wallet
 
 await provider.chargeTab("abc123", 1);  // charge $1.00
 await provider.chargeTab("abc123", 1);  // charge another $1.00
 ```
 
 ```python [Python]
-from payskill import PayClient, build_auth_headers
+from payskill import Wallet
 
-# Charge via REST API (provider-side operation)
-headers = build_auth_headers(
-    private_key="0xPROVIDER_KEY", method="POST",
-    path="/api/v1/tabs/abc123/charge",
-    chain_id=contracts["chain_id"], router_address=contracts["router"],
-)
-httpx.post(
-    "https://testnet.pay-skill.com/api/v1/tabs/abc123/charge",
-    json={"amount": 1_000_000}, headers=headers,  # $1.00
-)
+provider = Wallet()  # provider wallet
+
+provider.charge_tab("abc123", 1)  # $1.00
+provider.charge_tab("abc123", 1)  # $1.00
 ```
 
 :::
@@ -182,9 +153,9 @@ result = agent.close_tab("abc123")
 ## What Happened on Close
 
 With $2.00 total charged from a $20.00 tab:
-- **Provider receives:** `$2.00 × 0.99 = $1.98` (processing fee deducted)
+- **Provider receives:** `$2.00 * 0.99 = $1.98` (processing fee deducted)
 - **Fee wallet receives:** `$0.20 (activation) + $0.02 (processing) = $0.22`
-- **Agent receives:** `$20.00 − $0.20 (activation) − $2.00 (charges) = $17.80`
+- **Agent receives:** `$20.00 - $0.20 (activation) - $2.00 (charges) = $17.80`
 
 See [Fees](#fees) for full breakdown including volume discounts.
 
@@ -195,4 +166,10 @@ See [Fees](#fees) for full breakdown including volume discounts.
 
 ## Next Steps
 
-- [x402 Tab Settlement](./x402-tab) — automatic tab-based micropayments for HTTP APIs
+- [x402 Tab Settlement](./x402-tab) -- automatic tab-based micropayments for HTTP APIs
+
+::: details Using testnet?
+
+Set `PAYSKILL_TESTNET=1` env var, or pass `--testnet` to CLI commands. Use `pay mint 100` to get testnet USDC.
+
+:::

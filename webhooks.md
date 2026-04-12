@@ -15,16 +15,7 @@ pay webhook register https://your-app.example.com/hooks \
 ```typescript [TypeScript]
 import { Wallet } from "@pay-skill/sdk";
 
-// Fetch contract addresses — never hardcode these
-const contracts = await fetch("https://testnet.pay-skill.com/api/v1/contracts")
-  .then(r => r.json());
-
-const wallet = new Wallet({
-  privateKey: process.env.PAYSKILL_KEY!,
-  chain: "base-sepolia",
-  apiUrl: "https://testnet.pay-skill.com/api/v1",
-  routerAddress: contracts.router,
-});
+const wallet = await Wallet.create();  // OS keychain (same key as CLI)
 
 const hook = await wallet.registerWebhook(
   "https://your-app.example.com/hooks",
@@ -35,21 +26,11 @@ console.log("webhook id:", hook.id);
 ```
 
 ```python [Python]
-import httpx
-from payskill import PayClient
+from payskill import Wallet
 
-# Fetch contract addresses — never hardcode these
-contracts = httpx.get("https://testnet.pay-skill.com/api/v1/contracts").json()
+wallet = Wallet()  # OS keychain (same key as CLI)
 
-client = PayClient(
-    api_url="https://testnet.pay-skill.com/api/v1",
-    signer="raw",
-    private_key="0xYOUR_KEY",
-    chain_id=contracts["chain_id"],
-    router_address=contracts["router"],
-)
-
-hook = client.register_webhook(
+hook = wallet.register_webhook(
     url="https://your-app.example.com/hooks",
     events=["payment.completed", "tab.opened"],
     secret="my-hmac-secret",
@@ -258,18 +239,18 @@ pay webhook delete <WEBHOOK_ID>
 
 ```typescript [TypeScript]
 // List all webhooks
-const hooks = await client.listWebhooks();
+const hooks = await wallet.listWebhooks();
 
 // Delete one
-await client.deleteWebhook(hooks[0].webhookId);
+await wallet.deleteWebhook(hooks[0].webhookId);
 ```
 
 ```python [Python]
 # List all webhooks
-hooks = client.list_webhooks()
+hooks = wallet.list_webhooks()
 
 # Delete one
-client.delete_webhook(hooks[0].id)
+wallet.delete_webhook(hooks[0].id)
 ```
 
 :::

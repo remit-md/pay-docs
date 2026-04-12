@@ -587,8 +587,8 @@ pay-gate itself is free. Standard Pay fees apply:
 
 | Metric | Direct (per-call on-chain) | Tab (batched) |
 |--------|---------------------------|---------------|
-| Gas per API call | ~$0.002-$0.004 | ~$0.000006 |
-| On-chain txs for 1000 calls | 1000 | ~12 |
+| Gas per API call | ~$0.002-$0.004 | Near-zero (batched) |
+| On-chain txs for 1000 calls | 1000 | Minimal (batched) |
 | Latency per call | ~2s | ~50ms |
 | Minimum viable price | ~$0.01 | ~$0.0001 |
 

@@ -48,7 +48,7 @@ curl https://my-api-gate.yourname.workers.dev/api/data
 # → 402 Payment Required
 
 # With Pay CLI → auto-pays and returns data
-pay request https://my-api-gate.yourname.workers.dev/api/data --testnet
+pay request https://my-api-gate.yourname.workers.dev/api/data
 # → 200 OK
 ```
 
@@ -204,7 +204,7 @@ curl -i http://localhost:8402/api/v1/data
 curl http://localhost:8402/__pay/health
 # {"status":"ok","facilitator":"reachable","version":"0.1.0"}
 
-# Full payment flow (testnet)
-pay request http://localhost:8402/api/v1/data --testnet
+# Full payment flow
+pay request http://localhost:8402/api/v1/data
 # → 200 OK
 ```

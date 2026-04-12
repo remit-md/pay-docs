@@ -13,7 +13,7 @@ Node.js 18+ required.
 ```typescript
 import { Wallet } from "@pay-skill/sdk";
 
-const wallet = new Wallet(); // reads PAYSKILL_KEY env var
+const wallet = await Wallet.create();  // OS keychain (same key as CLI)
 
 // Send $5 to a provider
 const result = await wallet.send("0xProvider...", 5, "invoice-42");
@@ -31,14 +31,14 @@ const response = await wallet.request("https://api.example.com/data");
 ```typescript
 import { Wallet } from "@pay-skill/sdk";
 
-// Zero-config (reads PAYSKILL_KEY env var)
+// OS keychain (recommended — same key as CLI)
+const wallet = await Wallet.create();
+
+// Environment variable (CI/containers — reads PAYSKILL_KEY)
 const wallet = new Wallet();
 
-// Explicit key
+// Explicit key (testing only)
 const wallet = new Wallet({ privateKey: "0xabc..." });
-
-// OS keychain (reads key stored by `pay` CLI) — tries keychain first, then env
-const wallet = await Wallet.create();
 
 // Env var only
 const wallet = Wallet.fromEnv();

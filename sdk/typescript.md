@@ -198,7 +198,7 @@ const unregister = register(wallet);
 // fetch() globally handles 402 now
 ```
 
-See the full [fetch() Wrapper guide](/docs/sdk/fetch) for budget controls, SDK injection examples, and the `onPayment` callback.
+See the full [fetch() Wrapper guide](/sdk/fetch) for budget controls, SDK injection examples, and the `onPayment` callback.
 
 ## Balance and Status
 

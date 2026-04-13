@@ -98,4 +98,4 @@ For maximum discoverability, add a DNS TXT record:
 _x402.api.example.com. 300 IN TXT "v=x4021;descriptor=api;url=https://api.example.com/.well-known/x402"
 ```
 
-See [Service Discovery](/skills/pay/references/discovery) for details.
+See the [pay-gate Guide](/gate/guide) for full setup details.

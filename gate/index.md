@@ -1,4 +1,9 @@
-# pay-gate
+---
+title: "Ᵽay-gate — x402 Payment Gateway for Any HTTP API"
+description: "Drop-in reverse proxy that adds x402 payment gating to any HTTP API. Cloudflare Worker, Docker, Rust binary, or sidecar deployment."
+---
+
+# Ᵽay-gate
 
 Drop-in x402 payment gateway for any HTTP API. Deploy in front of your service, define pricing per route, and every request is gated via x402.
 

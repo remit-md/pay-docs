@@ -1,3 +1,8 @@
+---
+title: "Quickstart: x402 Direct Settlement — HTTP 402 Payments"
+description: "Automatically pay for HTTP API calls using x402. When a server returns 402 Payment Required, the agent pays and retries with no manual logic."
+---
+
 # Quickstart: x402 Direct Settlement
 
 Pay for HTTP API calls automatically using the x402 protocol. When a server returns `402 Payment Required`, the client pays and retries -- no manual payment logic needed.

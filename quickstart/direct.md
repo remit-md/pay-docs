@@ -1,3 +1,8 @@
+---
+title: "Quickstart: Direct USDC Payment — Agent to Provider"
+description: "Send a one-shot USDC payment from an AI agent to a provider. The simplest Ᵽay flow using CLI, TypeScript, or Python."
+---
+
 # Quickstart: Direct Payment
 
 Send a one-shot USDC payment from an agent to a provider. This is the simplest Pay flow.

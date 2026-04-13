@@ -1,3 +1,8 @@
+---
+title: "AI Framework Integrations — Claude, LangChain, CrewAI, LlamaIndex"
+description: "Connect Ᵽay to Claude Desktop, Cursor, LangChain, CrewAI, LlamaIndex, Vercel AI SDK, OpenAI, and Semantic Kernel via MCP."
+---
+
 # Framework Integrations
 
 All frameworks below connect to the same MCP server: `@pay-skill/mcp`. Install once, use from any AI framework that supports the Model Context Protocol.

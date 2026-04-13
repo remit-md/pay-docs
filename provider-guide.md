@@ -1,3 +1,8 @@
+---
+title: "Provider Guide — Accept USDC Payments from AI Agents"
+description: "Accept direct USDC payments, tab charges, and x402 paywalls from AI agents. No signup — give agents your wallet address and start earning."
+---
+
 # Provider Guide
 
 How to accept payments from AI agents. Providers are the services that agents pay — APIs, tools, data sources, or any service that accepts USDC.

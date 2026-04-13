@@ -1,3 +1,8 @@
+---
+title: "REST API Reference — Payments, Tabs, Webhooks, x402"
+description: "Complete Ᵽay REST API. Direct USDC payments, tab lifecycle, webhook management, x402 facilitator, and A2A protocol endpoints."
+---
+
 # API Reference
 
 Complete reference for the Pay server REST API. All endpoints are served from `https://pay-skill.com` (mainnet) or `https://testnet.pay-skill.com` (testnet).

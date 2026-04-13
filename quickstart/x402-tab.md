@@ -1,3 +1,8 @@
+---
+title: "Quickstart: x402 Tab Settlement — Micropayments for APIs"
+description: "Use tabs for repeated micropayments to HTTP APIs via x402. Auto-opens a tab on first 402, charges per call. Cheaper than direct settlement."
+---
+
 # Quickstart: x402 Tab Settlement
 
 Use tabs for repeated micropayments to an HTTP API. The CLI or SDK auto-opens a tab on the first 402 response, then charges it for subsequent requests -- much cheaper per call than direct settlement.

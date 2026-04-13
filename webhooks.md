@@ -1,3 +1,8 @@
+---
+title: "Webhooks — Real-Time Payment Event Notifications"
+description: "Register webhooks for USDC payment events, tab state changes, and x402 settlements. HMAC-signed, at-least-once delivery with retries."
+---
+
 # Webhooks
 
 Real-time event notifications delivered to your URL. Register a webhook to get notified when payments complete, tabs change state, or x402 settlements happen.

@@ -40,6 +40,8 @@ routes:
     price: "0.01"                    # $0.01 per call
     settlement: "tab"                # tab-backed micropayment
     hint: "?q={query}&limit=50"      # free-form hint for agents
+    description: "Search premium data" # in x402 402 response
+    mime_type: "application/json"    # in x402 402 response
 
   - path: "/api/v1/report"
     method: "POST"                   # match specific HTTP method
@@ -133,6 +135,8 @@ Store routes as JSON in a KV namespace. Updatable without redeployment:
 | `allowlist` | string[] | No | Agent addresses that skip payment |
 | `price_endpoint` | string | No | URL for dynamic pricing |
 | `hint` | string | No | Free-form usage hint for agents (e.g. `"?q={city}"`, `'{"prompt": "string"}'`) |
+| `description` | string | No | Resource description in 402 response (e.g. `"Weather forecast data"`) |
+| `mime_type` | string | No | Response MIME type in 402 response (e.g. `"application/json"`) |
 | `proxy_rewrite` | string | No | Rewrite path before proxying (Worker only) |
 | `proxy_params` | object | No | Query params to add to proxied request (Worker only) |
 

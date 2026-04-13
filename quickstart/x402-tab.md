@@ -32,7 +32,7 @@ app.get("/api/data", (req, res) => {
         asset: "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",  // USDC on Base
         payTo: "0xYourProviderWallet",
         maxTimeoutSeconds: 60,
-        extra: { name: "USDC", version: "2", facilitator: "https://pay-skill.com/x402", settlement: "tab" },
+        extra: { settlement: "tab" },
       }],
       extensions: {},
     };

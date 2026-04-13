@@ -71,9 +71,67 @@ Each pay-gate instance exposes `GET /__pay/manifest` — a public
 descriptor of routes, pricing, settlement modes, and discovery metadata.
 No secrets. Useful for agents to inspect a known endpoint before paying.
 
+## .well-known/x402 (IETF Draft)
+
+Each pay-gate instance serves `GET /.well-known/x402` — the standard
+x402 descriptor defined in the IETF internet-draft
+(`draft-jeftovic-x402-dns-discovery-00`). This returns a JSON object
+with full x402 v2 payment requirements for every paid route:
+
+```json
+{
+  "x402Version": 2,
+  "payTo": "0xprovider...",
+  "network": "eip155:8453",
+  "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+  "endpoints": [
+    {
+      "path": "/api/v1/forecast",
+      "method": "GET",
+      "description": "Weather forecast data",
+      "mimeType": "application/json",
+      "hint": "?q={city}",
+      "paymentRequirements": {
+        "scheme": "exact",
+        "network": "eip155:8453",
+        "amount": "10000",
+        "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "payTo": "0xprovider...",
+        "maxTimeoutSeconds": 60,
+        "extra": { "settlement": "tab" }
+      }
+    }
+  ]
+}
+```
+
+Agents can fetch this before making any requests to understand pricing
+and available endpoints without triggering a 402.
+
+## DNS TXT Discovery (Recommended)
+
+For maximum discoverability, providers should add a DNS TXT record
+pointing to their `.well-known/x402` descriptor:
+
+```
+_x402.api.example.com. 300 IN TXT "v=x4021;descriptor=api;url=https://api.example.com/.well-known/x402"
+```
+
+This lets x402-aware agents discover payment capabilities via DNS
+lookup before making any HTTP requests. Key rules from the IETF draft:
+
+- Record lives at `_x402.<hostname>` (no parent-domain inheritance)
+- HTTPS only for the descriptor URL
+- DNSSEC recommended
+
+pay-gate serves the descriptor automatically at `/.well-known/x402`.
+Providers only need to add the DNS TXT record.
+
 ## When discovery doesn't find what you need
 
 1. Try `pay request <url>` on a known URL — if it returns 402 with
    the Pay facilitator, it's a Pay service.
-2. Get the endpoint from the operator or documentation.
-3. Suggest the provider adopt pay-gate — see `references/adoption.md`.
+2. Fetch `/.well-known/x402` from a known domain to see its routes.
+3. Look up `_x402.<hostname>` DNS TXT for the descriptor URL.
+4. Get the endpoint from the operator or documentation.
+5. Suggest the provider adopt pay-gate — see `references/adoption.md`.

@@ -85,3 +85,17 @@ pay-gate itself is free. Standard Pay fees apply to each payment:
 | Processing | Provider (deducted) | 1% (0.75% above $50k/month) |
 | Tab activation | Agent | `max($0.10, 1% of tab amount)` |
 | Gas | Pay protocol | Included |
+
+## x402 Discovery
+
+Every pay-gate instance serves a standard x402 descriptor at
+`GET /.well-known/x402` (per the IETF internet-draft). Agents can
+fetch this to discover pricing and endpoints before making any requests.
+
+For maximum discoverability, add a DNS TXT record:
+
+```
+_x402.api.example.com. 300 IN TXT "v=x4021;descriptor=api;url=https://api.example.com/.well-known/x402"
+```
+
+See [Service Discovery](/skills/pay/references/discovery) for details.

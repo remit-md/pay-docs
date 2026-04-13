@@ -38,7 +38,7 @@ async function main() {
           asset: contracts.usdc,
           payTo: "0x000000000000000000000000000000000000dEaD",
           maxTimeoutSeconds: 60,
-          extra: { name: "USDC", version: "2", facilitator: "https://testnet.pay-skill.com/x402", settlement: "direct" },
+          extra: { settlement: "direct" },
         }],
         extensions: {},
       };

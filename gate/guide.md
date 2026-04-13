@@ -385,13 +385,10 @@ rate_limits:
 GET /api/v1/premium/data
 → 402 Payment Required
   PAYMENT-REQUIRED: base64({
-    "scheme": "exact",
-    "amount": "10000",
-    "settlement": "tab",
-    "to": "0xprovider...",
-    "facilitator": "https://pay-skill.com/x402",
-    "maxChargePerCall": "10000",
-    "network": "base"
+    "x402Version": 2,
+    "accepts": [{ "scheme": "exact", "amount": "10000",
+      "payTo": "0xprovider...", "network": "eip155:8453",
+      "extra": { "settlement": "tab" } }]
   })
 ```
 

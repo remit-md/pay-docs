@@ -1,9 +1,9 @@
 import { defineConfig } from "vitepress";
 
 export default defineConfig({
-  title: "Pay",
+  title: "Ᵽay",
   description:
-    "The complete x402 payment stack for AI agents. USDC on Base.",
+    "USDC payments for AI agents. x402 payment gateway, facilitator, SDKs, CLI, and MCP server. Base network.",
   base: "/docs/",
   cleanUrls: true,
   srcExclude: ["skills/**"],
@@ -14,7 +14,7 @@ export default defineConfig({
       "meta",
       {
         property: "og:title",
-        content: "Pay — The Complete x402 Payment Stack",
+        content: "Ᵽay — USDC Payments for AI Agents | x402 Payment Stack",
       },
     ],
     [
@@ -22,7 +22,7 @@ export default defineConfig({
       {
         property: "og:description",
         content:
-          "Gateway, facilitator, SDKs, CLI, and MCP server. AI agents pay for APIs with USDC on Base.",
+          "x402 payment gateway, facilitator, Python and TypeScript SDKs, CLI, and MCP server. AI agents pay for any API with USDC on Base.",
       },
     ],
   ],
@@ -31,7 +31,7 @@ export default defineConfig({
     nav: [
       { text: "Getting Started", link: "/" },
       { text: "CLI", link: "/cli/" },
-      { text: "pay-gate", link: "/gate/" },
+      { text: "Ᵽay-gate", link: "/gate/" },
       { text: "API Reference", link: "/api-reference" },
       {
         text: "GitHub",
@@ -71,10 +71,10 @@ export default defineConfig({
         text: "For Providers",
         items: [
           { text: "Provider Guide", link: "/provider-guide" },
-          { text: "pay-gate Overview", link: "/gate/" },
-          { text: "pay-gate Quick Start", link: "/gate/quickstart" },
-          { text: "pay-gate Configuration", link: "/gate/config" },
-          { text: "pay-gate Guide", link: "/gate/guide" },
+          { text: "Ᵽay-gate Overview", link: "/gate/" },
+          { text: "Ᵽay-gate Quick Start", link: "/gate/quickstart" },
+          { text: "Ᵽay-gate Configuration", link: "/gate/config" },
+          { text: "Ᵽay-gate Guide", link: "/gate/guide" },
           { text: "Webhooks", link: "/webhooks" },
         ],
       },
@@ -102,7 +102,7 @@ export default defineConfig({
 
     footer: {
       message:
-        "The complete x402 payment stack for AI agents.",
+        "Ᵽay — USDC payments for AI agents on Base.",
       copyright:
         "Copyright &copy; 2026 Agent Payment Protocol Infrastructure Inc.",
     },

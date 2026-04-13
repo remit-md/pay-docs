@@ -1,3 +1,8 @@
+---
+title: "Quickstart: Tab Lifecycle — Metered USDC Billing"
+description: "Open a pre-funded tab, charge per unit of work, then close. Tabs are ideal for metered AI agent billing with micropayments."
+---
+
 # Quickstart: Tab Lifecycle
 
 Open a pre-funded tab, charge it multiple times, then close. Tabs are ideal for metered billing where an agent pays a provider per unit of work.

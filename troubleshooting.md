@@ -1,3 +1,8 @@
+---
+title: "Troubleshooting — Common Errors and Debugging"
+description: "Fix common Ᵽay errors: insufficient balance, rate limits, failed payments, wrong network. Step-by-step debugging for CLI, SDK, and x402."
+---
+
 # Troubleshooting
 
 ## Common Errors

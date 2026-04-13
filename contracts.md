@@ -1,3 +1,8 @@
+---
+title: "Smart Contract Addresses on Base — Mainnet and Testnet"
+description: "Deployed Ᵽay contract addresses on Base mainnet and Sepolia testnet. PayRouter, PayDirect, PayTab, and USDC. Always fetch at runtime."
+---
+
 # Contracts & Networks
 
 Pay deploys smart contracts on Base. **Always fetch addresses at runtime** from the `/api/v1/contracts` endpoint -- never hardcode them.

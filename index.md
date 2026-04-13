@@ -1,17 +1,16 @@
 ---
 layout: home
+title: "Ᵽay — USDC Payments for AI Agents"
+description: "x402 payment gateway, facilitator, SDKs, CLI, and MCP server. AI agents pay for any API with USDC on Base."
 
 hero:
-  name: Pay
-  text: The Complete x402 Payment Stack
-  tagline: Gateway, facilitator, SDKs, CLI, and MCP server. AI agents pay for APIs with USDC on Base.
+  name: Ᵽay
+  text: USDC Payments for AI Agents
+  tagline: x402 payment gateway, facilitator, SDKs, CLI, and MCP server. Agents pay for any API with USDC on Base.
   actions:
     - theme: brand
       text: Get Started
       link: /quickstart/
-    - theme: alt
-      text: Architecture
-      link: /architecture
     - theme: alt
       text: Provider Guide
       link: /provider-guide
@@ -96,7 +95,6 @@ npx @pay-skill/mcp
 
 ## Links
 
-- [Architecture](/architecture)
 - [CLI Reference](/cli/)
 - [Provider Guide](/provider-guide)
 - [API Reference](/api-reference)

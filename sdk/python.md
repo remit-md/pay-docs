@@ -1,3 +1,8 @@
+---
+title: "Python SDK — USDC Payments for Python Agents"
+description: "Python SDK for Ᵽay. Wallet management, direct payments, tabs, x402 requests, and webhook registration. pip install payskill."
+---
+
 # Python SDK Reference
 
 ## Installation

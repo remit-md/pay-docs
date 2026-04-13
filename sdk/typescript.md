@@ -1,3 +1,8 @@
+---
+title: "TypeScript SDK — USDC Payments for Node.js Agents"
+description: "TypeScript SDK for Ᵽay. Wallet management, direct payments, tabs, x402 requests, and webhook registration. npm install @pay-skill/sdk."
+---
+
 # TypeScript SDK Reference
 
 ## Installation

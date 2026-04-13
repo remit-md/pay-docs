@@ -1,3 +1,8 @@
+---
+title: "CLI Reference — Commands, Flags, and Wallet Management"
+description: "Complete reference for the pay CLI. Wallet setup, direct USDC payments, tabs, x402 requests, webhooks, and signer management."
+---
+
 # CLI Reference
 
 ## Installation

@@ -1,3 +1,8 @@
+---
+title: "Quickstart: AP2 Mandate-Backed Payment — Spending Constraints"
+description: "Use AP2 mandates to constrain AI agent spending. Set bounds on amount, currency, and expiry. Server validates every payment against the mandate."
+---
+
 # Quickstart: AP2 Mandate-Backed Payment
 
 Use AP2 mandates to constrain agent spending. A mandate sets bounds on what an agent can pay -- maximum amount, allowed currency, expiry -- and the server validates every payment against it.

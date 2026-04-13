@@ -1,3 +1,8 @@
+---
+title: "Full Stack Tutorial — Build a Paid API with Ᵽay"
+description: "Build a paid weather API and call it from an AI agent. Complete tutorial: provider deploys Ᵽay-gate, agent pays with USDC, money flows on Base."
+---
+
 # Full Stack Tutorial
 
 Build a paid weather API and call it from an AI agent. This tutorial shows the complete Pay flow: provider deploys pay-gate, agent pays, money flows.

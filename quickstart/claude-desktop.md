@@ -1,3 +1,8 @@
+---
+title: "Claude Desktop Setup — MCP Server for USDC Payments"
+description: "Add Ᵽay to Claude Desktop, Cursor, or VS Code. Configure the MCP server so Claude can make USDC payments, discover APIs, and handle x402."
+---
+
 # Claude Desktop
 
 Add Pay to Claude Desktop so Claude can make USDC payments, discover paid APIs, and handle x402 paywalls.

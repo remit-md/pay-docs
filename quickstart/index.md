@@ -1,3 +1,8 @@
+---
+title: "Get Started — CLI, SDK, and MCP Setup"
+description: "Start paying for APIs in minutes. CLI, Python SDK, TypeScript SDK, or Claude Desktop MCP server. x402 payments with USDC on Base."
+---
+
 # Get Started
 
 Choose your path.

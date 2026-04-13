@@ -1,3 +1,8 @@
+---
+title: "Quickstart: A2A + Tab — Metered Agent-to-Agent Billing"
+description: "Use Google A2A tasks with tab-backed metered billing. Agent opens a tab, provider charges per unit of work as the task progresses."
+---
+
 # Quickstart: A2A + Tab (Metered Billing)
 
 Use A2A tasks with tab-backed metered billing. The agent opens a tab, and the provider charges per unit of work as the task progresses.

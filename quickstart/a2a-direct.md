@@ -1,3 +1,8 @@
+---
+title: "Quickstart: A2A + Direct Payment — Agent-to-Agent with USDC"
+description: "Combine Google A2A protocol with Ᵽay direct payments. Send tasks with payment parts — the server validates payment before executing."
+---
+
 # Quickstart: A2A + Direct Payment
 
 Combine Google's Agent-to-Agent (A2A) protocol with Pay direct payments. The agent sends a task via A2A with a payment part -- the server validates payment before executing the task.

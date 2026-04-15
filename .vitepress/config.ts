@@ -90,6 +90,19 @@ export default defineConfig({
         ],
       },
       {
+        text: "Build with Pay",
+        items: [
+          { text: "Overview", link: "/guides/build-with-pay/" },
+          { text: "Choosing Your Integration", link: "/guides/build-with-pay/choosing" },
+          { text: "Wallet Key Management", link: "/guides/build-with-pay/key-management" },
+          { text: "Tab Lifecycle", link: "/guides/build-with-pay/tab-lifecycle" },
+          { text: "Spending Controls", link: "/guides/build-with-pay/spending-controls" },
+          { text: "Error Handling", link: "/guides/build-with-pay/error-handling" },
+          { text: "Going to Production", link: "/guides/build-with-pay/production" },
+          { text: "Settlement Mode", link: "/guides/build-with-pay/settlement-mode" },
+        ],
+      },
+      {
         text: "Quickstarts",
         items: [
           { text: "Full Stack Tutorial", link: "/quickstart/end-to-end" },

@@ -31,32 +31,19 @@ jobs:
       - name: Build VitePress
         run: npx vitepress build
 
-      - name: Prepare link check root
-        run: |
-          # VitePress builds with base: /docs/ so all links are root-relative
-          # (/docs/quickstart/, /docs/assets/...). Mirror the deployed structure
-          # so lychee can resolve them via --root-dir.
-          mkdir -p _site/docs
-          cp -r .vitepress/dist/* _site/docs/
-
-      - name: Link check (internal)
+      - name: Link check (markdown sources)
         uses: lycheeverse/lychee-action@v2
         with:
           args: >
             --no-progress
-            --root-dir _site
+            --offline
             --exclude-all-private
             --exclude 'localhost'
             --exclude '127.0.0.1'
-            --exclude 'testnet.pay-skill.com'
-            --exclude 'pay-skill.com/api'
-            --exclude 'sepolia.base.org'
-            --exclude 'basescan.org'
-            --exclude 'github.com/pay-skill/pay-server'
-            --exclude 'github.com/pay-skill/pay-dashboard'
-            --exclude '/favicon.ico'
             --include-fragments
-            '_site/docs/**/*.html'
+            '**/*.md'
+            '!node_modules/**'
+            '!skills/**'
           fail: true
 
       - uses: actions/setup-python@v6

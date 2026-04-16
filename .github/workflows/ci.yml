@@ -28,23 +28,8 @@ jobs:
       - name: Install
         run: npm ci
 
-      - name: Build VitePress
+      - name: Build VitePress (validates internal links)
         run: npx vitepress build
-
-      - name: Link check (markdown sources)
-        uses: lycheeverse/lychee-action@v2
-        with:
-          args: >
-            --no-progress
-            --offline
-            --exclude-all-private
-            --exclude 'localhost'
-            --exclude '127.0.0.1'
-            --include-fragments
-            '**/*.md'
-            '!node_modules/**'
-            '!skills/**'
-          fail: true
 
       - uses: actions/setup-python@v6
         with:
